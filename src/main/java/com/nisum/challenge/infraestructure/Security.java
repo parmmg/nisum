@@ -1,6 +1,6 @@
 package com.nisum.challenge.infraestructure;
 
-import com.nisum.challenge.utils.DateUtils;
+import com.nisum.challenge.util.DateUtils;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

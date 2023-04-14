@@ -5,6 +5,8 @@ import com.nisum.challenge.entity.Configuration;
 import com.nisum.challenge.config.enumerator.ConfigurationNameEnum;
 import com.nisum.challenge.presenter.ConfigurationPresenter;
 
+import java.util.List;
+
 
 public interface ConfigurationService {
 
@@ -12,6 +14,6 @@ public interface ConfigurationService {
 
     ConfigurationPresenter saveConfiguration(ConfigurationPresenter configurationPresenter);
 
-    Iterable<Configuration> getConfigurations();
+    List<ConfigurationPresenter> getConfigurations();
 
 }

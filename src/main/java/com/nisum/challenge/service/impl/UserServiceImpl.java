@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserPresenter getUserById(UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ValidationException("User account not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "User account not found"));
         return toPresenter(user);
     }
 
@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
     public UserPresenter login(LoginPresenter loginPresenter) {
         User user = userRepository.findByEmail(loginPresenter.getUser()).orElseThrow(() -> new ValidationException(HttpStatus.FORBIDDEN, "Denied access"));
         if (!user.getPassword().equals(passwordEncoder.encode(loginPresenter.getPassword()))) {
-            throw new ValidationException(HttpStatus.FORBIDDEN, "Denied access ");
+            throw new ValidationException(HttpStatus.FORBIDDEN, "Denied access");
         }
         user.setLastLogin(new Date());
         user.setModified(user.getLastLogin());

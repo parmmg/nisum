@@ -80,8 +80,8 @@
         <sql dbms="h2"
              endDelimiter="\nGO"
              stripComments="true">
-            INSERT INTO CONFIGURATIONS (ID, NAME, PATTERN, MESSAGE)  VALUES('9d1f2f65-ad08-4810-a855-3278ba3c1f95', 'PASSWORD_VALIDATION', '^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$', 'Password not valid. It must have between 8 and 16 characters, at least one digit, one lowercase and one uppercase');
-            INSERT INTO CONFIGURATIONS (ID, NAME, PATTERN, MESSAGE)  VALUES('dd73bef5-8b4b-4ced-b747-5829c51dec66', 'EMAIL_VALIDATION', '^[^@]+@[^@]+\.[a-zA-Z]{2,}$', 'Email not valid. Must be like a@a.a');
+            INSERT INTO CONFIGURATIONS (ID, NAME, PATTERN, MESSAGE)  VALUES('92ddd497-e106-4e6d-916b-48db2af914bf', 'PASSWORD_VALIDATION', '^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$', 'Password not valid. It must have between 8 and 16 characters, at least one digit, one lowercase and one uppercase');
+            INSERT INTO CONFIGURATIONS (ID, NAME, PATTERN, MESSAGE)  VALUES('c87f5494-6a7d-4d12-9da3-c10a5becf769', 'EMAIL_VALIDATION', '^[^@]+@[^@]+\.[a-zA-Z]{2,}$', 'Email not valid. Must be like a@a.a');
         </sql>
     </changeSet>
 </databaseChangeLog>

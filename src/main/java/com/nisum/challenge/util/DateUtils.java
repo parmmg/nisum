@@ -1,4 +1,4 @@
-package com.nisum.challenge.utils;
+package com.nisum.challenge.util;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

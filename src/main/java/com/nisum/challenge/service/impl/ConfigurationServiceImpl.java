@@ -10,6 +10,9 @@ import com.nisum.challenge.service.ConfigurationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Service
 public class ConfigurationServiceImpl implements ConfigurationService {
@@ -38,7 +41,18 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     }
 
     @Override
-    public Iterable<Configuration> getConfigurations() {
-        return configurationRepository.findAll();
+    public List<ConfigurationPresenter> getConfigurations() {
+        List<ConfigurationPresenter> configurationPresenters = new ArrayList<>();
+        configurationRepository.findAll().forEach(configuration -> configurationPresenters.add(toPresenter(configuration)));
+        return configurationPresenters;
+    }
+
+    private ConfigurationPresenter toPresenter (Configuration configuration) {
+        return ConfigurationPresenter.builder()
+                .id(configuration.getId())
+                .name(configuration.getName().toString())
+                .message(configuration.getMessage())
+                .pattern(configuration.getPattern())
+                .build();
     }
 }

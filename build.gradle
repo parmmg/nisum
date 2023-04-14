@@ -33,9 +33,10 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
 	runtimeOnly 'com.h2database:h2'
 	implementation 'org.springframework.security:spring-security-core'
+	testImplementation 'org.mockito:mockito-core'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation group: 'org.pitest', name: 'pitest-junit5-plugin', version: '1.1.1'
 }
 
 tasks.named('test') {
