@@ -1,0 +1,87 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet author="parmenia.maldonado" id="0000-0000-0001">
+        <createTable tableName="users">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" primaryKeyName="users_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_login" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="parmenia.maldonado" id="0000-0000-0002">
+        <createTable tableName="phones">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" primaryKeyName="phones_pkey"/>
+            </column>
+            <column name="number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city_code" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country_code" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="parmenia.maldonado" id="0000-0000-0003">
+        <createTable tableName="configurations">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" primaryKeyName="configurations_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pattern" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="parmenia.maldonado" id="0000-0000-0004">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="phones"
+                                 constraintName="fk_phones_user" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="parmenia.maldonado" id="0000-0000-0005">
+        <sql dbms="h2"
+             endDelimiter="\nGO"
+             stripComments="true">
+            INSERT INTO CONFIGURATIONS (ID, NAME, PATTERN, MESSAGE)  VALUES('9d1f2f65-ad08-4810-a855-3278ba3c1f95', 'PASSWORD_VALIDATION', '^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$', 'Password not valid. It must have between 8 and 16 characters, at least one digit, one lowercase and one uppercase');
+            INSERT INTO CONFIGURATIONS (ID, NAME, PATTERN, MESSAGE)  VALUES('dd73bef5-8b4b-4ced-b747-5829c51dec66', 'EMAIL_VALIDATION', '^[^@]+@[^@]+\.[a-zA-Z]{2,}$', 'Email not valid. Must be like a@a.a');
+        </sql>
+    </changeSet>
+</databaseChangeLog>
