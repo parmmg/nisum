@@ -2,7 +2,7 @@ package com.nisum.challenge.service.impl;
 
 
 import com.nisum.challenge.entity.Configuration;
-import com.nisum.challenge.config.enumerator.ConfigurationNameEnum;
+import com.nisum.challenge.enumerator.ConfigurationNameEnum;
 import com.nisum.challenge.exception.ValidationException;
 import com.nisum.challenge.presenter.ConfigurationPresenter;
 import com.nisum.challenge.repository.ConfigurationRepository;

@@ -3,7 +3,7 @@ package com.nisum.challenge.service.impl;
 import com.nisum.challenge.entity.Configuration;
 import com.nisum.challenge.entity.Phone;
 import com.nisum.challenge.entity.User;
-import com.nisum.challenge.config.enumerator.ConfigurationNameEnum;
+import com.nisum.challenge.enumerator.ConfigurationNameEnum;
 import com.nisum.challenge.exception.ValidationException;
 import com.nisum.challenge.presenter.LoginPresenter;
 import com.nisum.challenge.presenter.PhonePresenter;

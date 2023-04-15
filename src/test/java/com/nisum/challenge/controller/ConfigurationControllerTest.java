@@ -1,6 +1,6 @@
 package com.nisum.challenge.controller;
 
-import com.nisum.challenge.config.enumerator.ConfigurationNameEnum;
+import com.nisum.challenge.enumerator.ConfigurationNameEnum;
 import com.nisum.challenge.exception.ValidationException;
 import com.nisum.challenge.infraestructure.Response;
 import com.nisum.challenge.presenter.ConfigurationPresenter;

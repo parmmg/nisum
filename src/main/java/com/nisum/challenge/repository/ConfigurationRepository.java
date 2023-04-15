@@ -1,7 +1,7 @@
 package com.nisum.challenge.repository;
 
 import com.nisum.challenge.entity.Configuration;
-import com.nisum.challenge.config.enumerator.ConfigurationNameEnum;
+import com.nisum.challenge.enumerator.ConfigurationNameEnum;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

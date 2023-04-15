@@ -1,4 +1,4 @@
-package com.nisum.challenge.config.enumerator;
+package com.nisum.challenge.enumerator;
 
 public enum ConfigurationNameEnum {
     EMAIL_VALIDATION("EMAIL_VALIDATION"),

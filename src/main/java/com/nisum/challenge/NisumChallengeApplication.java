@@ -7,10 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @OpenAPIDefinition(info = @Info(title = "NISUM challenge user api rest", description = "Api for register users"))
-public class ChallengeApplication {
+public class NisumChallengeApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ChallengeApplication.class, args);
+		SpringApplication.run(NisumChallengeApplication.class, args);
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.nisum.challenge.entity;
 
-import com.nisum.challenge.config.enumerator.ConfigurationNameEnum;
+import com.nisum.challenge.enumerator.ConfigurationNameEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
