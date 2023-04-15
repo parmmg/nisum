@@ -3,6 +3,7 @@ package com.nisum.challenge.service;
 import com.nisum.challenge.enumerator.ConfigurationNameEnum;
 import com.nisum.challenge.entity.User;
 import com.nisum.challenge.exception.ValidationException;
+import com.nisum.challenge.infraestructure.Security;
 import com.nisum.challenge.presenter.LoginPresenter;
 import com.nisum.challenge.presenter.UserPresenter;
 import com.nisum.challenge.repository.UserRepository;
@@ -15,7 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.*;
 
@@ -29,8 +29,6 @@ public class UserServiceTest {
     @InjectMocks
     @Spy
     private UserService userService = new UserServiceImpl();
-    @Mock
-    PasswordEncoder passwordEncoder;
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -66,7 +64,7 @@ public class UserServiceTest {
     public void shouldGetLogin(){
         LoginPresenter loginPresenter = testData.loginPresenterFake();
         when(userRepository.findByEmail(loginPresenter.getUser())).thenReturn(Optional.of(testData.userFake()));
-        lenient().when(passwordEncoder.encode(loginPresenter.getPassword())).thenReturn(loginPresenter.getPassword());
+        lenient().when(Security.encode(loginPresenter.getPassword())).thenReturn(loginPresenter.getPassword());
         UserPresenter userPresenter = userService.login(loginPresenter);
         Assertions.assertThat(userPresenter.getEmail()).isEqualTo(loginPresenter.getUser());
     }
@@ -76,7 +74,7 @@ public class UserServiceTest {
         LoginPresenter loginPresenter = testData.loginPresenterFake();
         loginPresenter.setPassword("");
         when(userRepository.findByEmail(loginPresenter.getUser())).thenReturn(Optional.of(testData.userFake()));
-        lenient().when(passwordEncoder.encode(loginPresenter.getPassword())).thenReturn(anyString());
+        lenient().when(Security.encode(loginPresenter.getPassword())).thenReturn(anyString());
         Assertions.assertThatThrownBy(() -> userService.login(loginPresenter)).isInstanceOf(ValidationException.class)
                 .hasMessageContaining("Denied access");
     }
@@ -85,7 +83,7 @@ public class UserServiceTest {
     public void shouldThrowExceptionWhenLoginWithIncorrectEmail() {
         LoginPresenter loginPresenter = testData.loginPresenterFake();
         when(userRepository.findByEmail(loginPresenter.getUser())).thenReturn(Optional.empty());
-        lenient().when(passwordEncoder.encode(loginPresenter.getPassword())).thenReturn(anyString());
+        lenient().when(Security.encode(loginPresenter.getPassword())).thenReturn(anyString());
         Assertions.assertThatThrownBy(() -> userService.login(loginPresenter)).isInstanceOf(ValidationException.class)
                 .hasMessageContaining("Denied access");
     }
@@ -94,7 +92,7 @@ public class UserServiceTest {
     public void shouldSaveUser() {
         User user = testData.userFake();
         UserPresenter userPresenter = testData.userPresenterFake();
-        lenient().when(passwordEncoder.encode(user.getPassword())).thenReturn(user.getPassword());
+        lenient().when(Security.encode(user.getPassword())).thenReturn(user.getPassword());
         when(userRepository.save(user)).thenReturn(user);
         when(configurationService.getConfigurationByName(ConfigurationNameEnum.EMAIL_VALIDATION)).thenReturn(testData.configurationFake(ConfigurationNameEnum.EMAIL_VALIDATION));
         UserPresenter userSaved = userService.saveUser(userPresenter);
@@ -105,7 +103,7 @@ public class UserServiceTest {
     public void shouldGetValidationExceptionWhenEmailExist() {
         UserPresenter user = testData.userPresenterFake();
         user.setId(UUID.randomUUID());
-        lenient().when(passwordEncoder.encode(user.getPassword())).thenReturn(user.getPassword());
+        lenient().when(Security.encode(user.getPassword())).thenReturn(user.getPassword());
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(testData.userFake()));
         when(configurationService.getConfigurationByName(ConfigurationNameEnum.EMAIL_VALIDATION)).thenReturn(testData.configurationFake(ConfigurationNameEnum.EMAIL_VALIDATION));
         when(configurationService.getConfigurationByName(ConfigurationNameEnum.PASSWORD_VALIDATION)).thenReturn(testData.configurationFake(ConfigurationNameEnum.PASSWORD_VALIDATION));
@@ -116,7 +114,7 @@ public class UserServiceTest {
     @Test
     public void shouldGetValidationExceptionWhenEmailIsInvalid() {
         UserPresenter user = testData.userPresenterFake();
-        lenient().when(passwordEncoder.encode(user.getPassword())).thenReturn(user.getPassword());
+        lenient().when(Security.encode(user.getPassword())).thenReturn(user.getPassword());
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
         when(configurationService.getConfigurationByName(ConfigurationNameEnum.EMAIL_VALIDATION)).thenReturn(testData.configurationFake(ConfigurationNameEnum.EMAIL_VALIDATION));
         when(configurationService.getConfigurationByName(ConfigurationNameEnum.PASSWORD_VALIDATION)).thenReturn(testData.configurationFake(ConfigurationNameEnum.PASSWORD_VALIDATION));
@@ -128,7 +126,7 @@ public class UserServiceTest {
     @Test
     public void shouldGetValidationExceptionWhenPasswordIsInvalid() {
         UserPresenter user = testData.userPresenterFake();
-        lenient().when(passwordEncoder.encode(user.getPassword())).thenReturn(user.getPassword());
+        lenient().when(Security.encode(user.getPassword())).thenReturn(user.getPassword());
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
         when(configurationService.getConfigurationByName(ConfigurationNameEnum.EMAIL_VALIDATION)).thenReturn(testData.configurationFake(ConfigurationNameEnum.EMAIL_VALIDATION));
         when(configurationService.getConfigurationByName(ConfigurationNameEnum.PASSWORD_VALIDATION)).thenReturn(testData.configurationFake(ConfigurationNameEnum.PASSWORD_VALIDATION));

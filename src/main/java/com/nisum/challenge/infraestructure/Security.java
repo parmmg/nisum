@@ -5,6 +5,8 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import com.nisum.challenge.entity.User;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 import java.time.LocalDate;
@@ -16,9 +18,8 @@ public class Security {
     public static String createToken(User user) {
         {
             try{
-                SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS512;
                 HashMap<String, Object> header = new HashMap<>();
-                header.put("alg", signatureAlgorithm.toString());
+                header.put("alg", SignatureAlgorithm.HS512.toString());
                 header.put("typ","JWT");
                 LocalDateTime expired = LocalDateTime.now().plusHours(1);
                 JwtBuilder tokenJWT = Jwts
@@ -33,6 +34,22 @@ public class Security {
             } catch (Exception e) {
                 return "Error creating the token JWT";
             }
+        }
+    }
+
+
+    public static String encode(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(password.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for(byte b : hash) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        }
+        catch (NoSuchAlgorithmException e) {
+            return password;
         }
     }
 }

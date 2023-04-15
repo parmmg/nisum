@@ -15,7 +15,6 @@ import com.nisum.challenge.service.UserService;
 import com.nisum.challenge.infraestructure.Security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +25,6 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -98,7 +95,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserPresenter login(LoginPresenter loginPresenter) {
         User user = userRepository.findByEmail(loginPresenter.getUser()).orElseThrow(() -> new ValidationException(HttpStatus.FORBIDDEN, "Denied access"));
-        if (!user.getPassword().equals(passwordEncoder.encode(loginPresenter.getPassword()))) {
+        if (!user.getPassword().equals(Security.encode(loginPresenter.getPassword()))) {
             throw new ValidationException(HttpStatus.FORBIDDEN, "Denied access");
         }
         user.setLastLogin(new Date());
@@ -137,7 +134,7 @@ public class UserServiceImpl implements UserService {
         if (!Pattern.compile(configurationPassword.getPattern()).matcher(userPresenter.getPassword()).matches()) {
             throw new ValidationException(configurationPassword.getMessage());
         }
-        userPresenter.setPassword(passwordEncoder.encode(userPresenter.getPassword()));
+        userPresenter.setPassword(Security.encode(userPresenter.getPassword()));
     }
 
 }

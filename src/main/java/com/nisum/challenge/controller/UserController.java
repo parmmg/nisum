@@ -5,6 +5,7 @@ import com.nisum.challenge.infraestructure.Response;
 import com.nisum.challenge.presenter.UserPresenter;
 import com.nisum.challenge.service.UserService;
 import com.nisum.challenge.infraestructure.ResponseFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Generated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 @Generated
 @RestController
+@Tag(name = "Users", description = "Users Update and Create")
 public class UserController {
 
     @Autowired
@@ -42,7 +44,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/saveUser")
+    @PutMapping("/saveUser")
     public Response saveUser(@RequestBody UserPresenter userPresenter) {
         try {
             return ResponseFactory.getStatusOk("SUCCESS", userService.saveUser(userPresenter));

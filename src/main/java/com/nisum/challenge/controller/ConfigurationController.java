@@ -9,10 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Generated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @Generated
@@ -34,7 +31,7 @@ public class ConfigurationController {
         }
     }
 
-    @PostMapping("/saveConfiguration")
+    @PutMapping("/saveConfiguration")
     public Response saveConfiguration(@RequestBody ConfigurationPresenter configurationPresenter) {
         try {
             return ResponseFactory.getStatusOk("SUCCESS", configurationService.saveConfiguration(configurationPresenter));
