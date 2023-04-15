@@ -1,16 +1,16 @@
 package com.nisum.challenge.service.impl;
 
-import com.nisum.challenge.entity.Configuration;
+import com.nisum.challenge.entity.Validation;
 import com.nisum.challenge.entity.Phone;
 import com.nisum.challenge.entity.User;
-import com.nisum.challenge.enumerator.ConfigurationNameEnum;
+import com.nisum.challenge.enumerator.ValidationEnum;
 import com.nisum.challenge.exception.ValidationException;
 import com.nisum.challenge.presenter.LoginPresenter;
 import com.nisum.challenge.presenter.PhonePresenter;
 import com.nisum.challenge.presenter.UserPresenter;
 import com.nisum.challenge.repository.PhoneRepository;
 import com.nisum.challenge.repository.UserRepository;
-import com.nisum.challenge.service.ConfigurationService;
+import com.nisum.challenge.service.ValidationService;
 import com.nisum.challenge.service.UserService;
 import com.nisum.challenge.infraestructure.Security;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private ConfigurationService configurationService;
+    private ValidationService validationService;
     @Autowired
     private PhoneRepository phoneRepository;
 
@@ -126,13 +126,13 @@ public class UserServiceImpl implements UserService {
         if (userPresenter.getPassword() == null || userPresenter.getPassword().isEmpty() || userPresenter.getPassword().isBlank()) {
             throw new ValidationException("Password required");
         }
-        Configuration configurationEmail = configurationService.getConfigurationByName(ConfigurationNameEnum.EMAIL_VALIDATION);
-        Configuration configurationPassword = configurationService.getConfigurationByName(ConfigurationNameEnum.PASSWORD_VALIDATION);
-        if (!Pattern.compile(configurationEmail.getPattern()).matcher(userPresenter.getEmail()).matches()) {
-            throw new ValidationException(configurationEmail.getMessage());
+        Validation validationEmail = validationService.getValidationByName(ValidationEnum.EMAIL_VALIDATION);
+        Validation validationPassword = validationService.getValidationByName(ValidationEnum.PASSWORD_VALIDATION);
+        if (!Pattern.compile(validationEmail.getPattern()).matcher(userPresenter.getEmail()).matches()) {
+            throw new ValidationException(validationEmail.getMessage());
         }
-        if (!Pattern.compile(configurationPassword.getPattern()).matcher(userPresenter.getPassword()).matches()) {
-            throw new ValidationException(configurationPassword.getMessage());
+        if (!Pattern.compile(validationPassword.getPattern()).matcher(userPresenter.getPassword()).matches()) {
+            throw new ValidationException(validationPassword.getMessage());
         }
         userPresenter.setPassword(Security.encode(userPresenter.getPassword()));
     }

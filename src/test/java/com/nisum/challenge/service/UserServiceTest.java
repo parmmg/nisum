@@ -1,6 +1,6 @@
 package com.nisum.challenge.service;
 
-import com.nisum.challenge.enumerator.ConfigurationNameEnum;
+import com.nisum.challenge.enumerator.ValidationEnum;
 import com.nisum.challenge.entity.User;
 import com.nisum.challenge.exception.ValidationException;
 import com.nisum.challenge.infraestructure.Security;
@@ -28,11 +28,11 @@ public class UserServiceTest {
 
     @InjectMocks
     @Spy
-    private UserService userService = new UserServiceImpl();
+    private final UserService userService = new UserServiceImpl();
     @Mock
     private UserRepository userRepository;
     @Mock
-    private ConfigurationService configurationService;
+    private ValidationService validationService;
     private final TestData testData = new TestData();
 
 
@@ -94,7 +94,8 @@ public class UserServiceTest {
         UserPresenter userPresenter = testData.userPresenterFake();
         lenient().when(Security.encode(user.getPassword())).thenReturn(user.getPassword());
         when(userRepository.save(user)).thenReturn(user);
-        when(configurationService.getConfigurationByName(ConfigurationNameEnum.EMAIL_VALIDATION)).thenReturn(testData.configurationFake(ConfigurationNameEnum.EMAIL_VALIDATION));
+        when(validationService.getValidationByName(ValidationEnum.EMAIL_VALIDATION)).thenReturn(testData.configurationFake(ValidationEnum.EMAIL_VALIDATION));
+        when(validationService.getValidationByName(ValidationEnum.PASSWORD_VALIDATION)).thenReturn(testData.configurationFake(ValidationEnum.PASSWORD_VALIDATION));
         UserPresenter userSaved = userService.saveUser(userPresenter);
         Assertions.assertThat(userPresenter).isEqualTo(userSaved);
     }
@@ -105,8 +106,8 @@ public class UserServiceTest {
         user.setId(UUID.randomUUID());
         lenient().when(Security.encode(user.getPassword())).thenReturn(user.getPassword());
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(testData.userFake()));
-        when(configurationService.getConfigurationByName(ConfigurationNameEnum.EMAIL_VALIDATION)).thenReturn(testData.configurationFake(ConfigurationNameEnum.EMAIL_VALIDATION));
-        when(configurationService.getConfigurationByName(ConfigurationNameEnum.PASSWORD_VALIDATION)).thenReturn(testData.configurationFake(ConfigurationNameEnum.PASSWORD_VALIDATION));
+        when(validationService.getValidationByName(ValidationEnum.EMAIL_VALIDATION)).thenReturn(testData.configurationFake(ValidationEnum.EMAIL_VALIDATION));
+        when(validationService.getValidationByName(ValidationEnum.PASSWORD_VALIDATION)).thenReturn(testData.configurationFake(ValidationEnum.PASSWORD_VALIDATION));
         Assertions.assertThatThrownBy(() -> userService.saveUser(user)).isInstanceOf(ValidationException.class)
                 .hasMessageContaining("Email already exist");
     }
@@ -116,8 +117,8 @@ public class UserServiceTest {
         UserPresenter user = testData.userPresenterFake();
         lenient().when(Security.encode(user.getPassword())).thenReturn(user.getPassword());
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
-        when(configurationService.getConfigurationByName(ConfigurationNameEnum.EMAIL_VALIDATION)).thenReturn(testData.configurationFake(ConfigurationNameEnum.EMAIL_VALIDATION));
-        when(configurationService.getConfigurationByName(ConfigurationNameEnum.PASSWORD_VALIDATION)).thenReturn(testData.configurationFake(ConfigurationNameEnum.PASSWORD_VALIDATION));
+        when(validationService.getValidationByName(ValidationEnum.EMAIL_VALIDATION)).thenReturn(testData.configurationFake(ValidationEnum.EMAIL_VALIDATION));
+        when(validationService.getValidationByName(ValidationEnum.PASSWORD_VALIDATION)).thenReturn(testData.configurationFake(ValidationEnum.PASSWORD_VALIDATION));
         user.setEmail("");
         Assertions.assertThatThrownBy(() -> userService.saveUser(user)).isInstanceOf(ValidationException.class)
                 .hasMessageContaining("EMAIL_VALIDATION");
@@ -128,8 +129,8 @@ public class UserServiceTest {
         UserPresenter user = testData.userPresenterFake();
         lenient().when(Security.encode(user.getPassword())).thenReturn(user.getPassword());
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
-        when(configurationService.getConfigurationByName(ConfigurationNameEnum.EMAIL_VALIDATION)).thenReturn(testData.configurationFake(ConfigurationNameEnum.EMAIL_VALIDATION));
-        when(configurationService.getConfigurationByName(ConfigurationNameEnum.PASSWORD_VALIDATION)).thenReturn(testData.configurationFake(ConfigurationNameEnum.PASSWORD_VALIDATION));
+        when(validationService.getValidationByName(ValidationEnum.EMAIL_VALIDATION)).thenReturn(testData.configurationFake(ValidationEnum.EMAIL_VALIDATION));
+        when(validationService.getValidationByName(ValidationEnum.PASSWORD_VALIDATION)).thenReturn(testData.configurationFake(ValidationEnum.PASSWORD_VALIDATION));
         user.setPassword("");
         Assertions.assertThatThrownBy(() -> userService.saveUser(user)).isInstanceOf(ValidationException.class)
                 .hasMessageContaining("PASSWORD_VALIDATION");

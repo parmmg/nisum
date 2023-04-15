@@ -9,7 +9,9 @@ import com.nisum.challenge.util.TestData;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
@@ -22,6 +24,8 @@ public class UserControllerTest {
     @Mock
     private UserService userService;
 
+    @InjectMocks
+    @Spy
     private final UserController userController = new UserController();
     private final TestData testData = new TestData();
 

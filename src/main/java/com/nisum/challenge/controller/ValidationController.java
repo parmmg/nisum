@@ -1,9 +1,9 @@
 package com.nisum.challenge.controller;
 
-import com.nisum.challenge.presenter.ConfigurationPresenter;
+import com.nisum.challenge.presenter.ValidationPresenter;
 import com.nisum.challenge.presenter.LoginPresenter;
 import com.nisum.challenge.infraestructure.Response;
-import com.nisum.challenge.service.ConfigurationService;
+import com.nisum.challenge.service.ValidationService;
 import com.nisum.challenge.infraestructure.ResponseFactory;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Generated;
@@ -14,16 +14,16 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Generated
 @RestController
-@Tag(name = "Configuration", description = "Configuration Update and Create")
-public class ConfigurationController {
+@Tag(name = "Validation", description = "Validation Configurations Update and Create")
+public class ValidationController {
 
     @Autowired
-    private ConfigurationService configurationService;
+    private ValidationService validationService;
 
-    @GetMapping("/listConfigurations")
-    public Response listConfigurations() {
+    @GetMapping("/listValidations")
+    public Response listValidations() {
         try {
-            return ResponseFactory.getStatusOk("SUCCESS", configurationService.getConfigurations());
+            return ResponseFactory.getStatusOk("SUCCESS", validationService.getValidations());
         } catch (ResponseStatusException e) {
             return ResponseFactory.getStatusException(e.getStatusCode(),e.getMessage(), LoginPresenter.class);
         } catch (Exception ex) {
@@ -31,10 +31,10 @@ public class ConfigurationController {
         }
     }
 
-    @PutMapping("/saveConfiguration")
-    public Response saveConfiguration(@RequestBody ConfigurationPresenter configurationPresenter) {
+    @PutMapping("/saveValidation")
+    public Response saveValidation(@RequestBody ValidationPresenter validationPresenter) {
         try {
-            return ResponseFactory.getStatusOk("SUCCESS", configurationService.saveConfiguration(configurationPresenter));
+            return ResponseFactory.getStatusOk("SUCCESS", validationService.saveValidation(validationPresenter));
         } catch (ResponseStatusException e) {
             return ResponseFactory.getStatusException(e.getStatusCode(),e.getMessage(), LoginPresenter.class);
         } catch (Exception ex) {

@@ -1,6 +1,6 @@
 package com.nisum.challenge.util;
 
-import com.nisum.challenge.enumerator.ConfigurationNameEnum;
+import com.nisum.challenge.enumerator.ValidationEnum;
 import com.nisum.challenge.entity.*;
 import com.nisum.challenge.presenter.*;
 
@@ -46,8 +46,8 @@ public class TestData {
                 .build();
     }
 
-    public Configuration configurationFake(ConfigurationNameEnum name) {
-        return Configuration.builder()
+    public Validation configurationFake(ValidationEnum name) {
+        return Validation.builder()
                 .id(ID)
                 .name(name)
                 .pattern(name.toString().equals("") ? "^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{8,16}$" : "")
@@ -55,8 +55,8 @@ public class TestData {
                 .build();
     }
 
-    public ConfigurationPresenter configurationPresenterFake(ConfigurationNameEnum name) {
-        return ConfigurationPresenter.builder()
+    public ValidationPresenter configurationPresenterFake(ValidationEnum name) {
+        return ValidationPresenter.builder()
                 .id(ID)
                 .name(name.toString())
                 .pattern(name.toString().equals("") ? "^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{8,16}$" : "")

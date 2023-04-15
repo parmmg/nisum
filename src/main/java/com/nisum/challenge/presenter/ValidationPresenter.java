@@ -11,7 +11,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ConfigurationPresenter {
+public class ValidationPresenter {
     private UUID id;
     private String name;
     private String message;

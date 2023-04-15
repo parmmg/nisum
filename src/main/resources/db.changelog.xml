@@ -54,7 +54,7 @@
         </createTable>
     </changeSet>
     <changeSet author="parmenia.maldonado" id="0000-0000-0003">
-        <createTable tableName="configurations">
+        <createTable tableName="validations">
             <column name="id" type="UUID">
                 <constraints primaryKey="true" primaryKeyName="configurations_pkey"/>
             </column>

@@ -1,6 +1,6 @@
 package com.nisum.challenge.entity;
 
-import com.nisum.challenge.enumerator.ConfigurationNameEnum;
+import com.nisum.challenge.enumerator.ValidationEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -16,14 +16,14 @@ import java.util.UUID;
 @ToString(of = "name")
 @Builder
 @AllArgsConstructor
-public class Configuration {
+public class Validation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     @NotNull
     @Column(unique = true)
     @Enumerated(EnumType.STRING)
-    private ConfigurationNameEnum name;
+    private ValidationEnum name;
     @NotNull(message = "message required")
     @Builder.Default
     private String message = "Configuration error";
