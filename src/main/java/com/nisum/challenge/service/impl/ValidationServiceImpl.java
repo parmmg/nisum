@@ -8,6 +8,7 @@ import com.nisum.challenge.presenter.ValidationPresenter;
 import com.nisum.challenge.repository.ValidationRepository;
 import com.nisum.challenge.service.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class ValidationServiceImpl implements ValidationService {
 
     @Override
     public Validation getValidationByName(ValidationEnum name) {
-        return validationRepository.findByName(name).orElseThrow(() -> new ValidationException("Configuration " + name + " Not Found"));
+        return validationRepository.findByName(name).orElseThrow(() -> new ValidationException(HttpStatus.CONFLICT, "Configuration of validation " + name + " Not Found"));
     }
 
     @Override
@@ -36,14 +37,14 @@ public class ValidationServiceImpl implements ValidationService {
             validationPresenter.setId(validation.getId());
             return validationPresenter;
         } catch (IllegalArgumentException e) {
-            throw new ValidationException("Configuration " + validationPresenter.getName() + " not found");
+            throw new ValidationException(HttpStatus.CONFLICT, "Configuration of validation " + validationPresenter.getName() + " not found");
         }
     }
 
     @Override
     public List<ValidationPresenter> getValidations() {
         List<ValidationPresenter> validationPresenters = new ArrayList<>();
-        validationRepository.findAll().forEach(configuration -> validationPresenters.add(toPresenter(configuration)));
+        validationRepository.findAll().forEach(validation -> validationPresenters.add(toPresenter(validation)));
         return validationPresenters;
     }
 

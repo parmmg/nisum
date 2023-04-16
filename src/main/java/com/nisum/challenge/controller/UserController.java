@@ -22,7 +22,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/userId")
+    @GetMapping("/findUserById")
     public Response getUserById(@RequestParam("userId") UUID userId) {
         try {
             return ResponseFactory.getStatusOk("SUCCESS", userService.getUserById(userId));

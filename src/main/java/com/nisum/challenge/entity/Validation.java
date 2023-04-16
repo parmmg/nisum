@@ -11,7 +11,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "configurations")
+@Table(name = "validations")
 @EqualsAndHashCode(of = "id")
 @ToString(of = "name")
 @Builder

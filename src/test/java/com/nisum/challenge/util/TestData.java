@@ -46,7 +46,7 @@ public class TestData {
                 .build();
     }
 
-    public Validation configurationFake(ValidationEnum name) {
+    public Validation validationFake(ValidationEnum name) {
         return Validation.builder()
                 .id(ID)
                 .name(name)
@@ -55,7 +55,7 @@ public class TestData {
                 .build();
     }
 
-    public ValidationPresenter configurationPresenterFake(ValidationEnum name) {
+    public ValidationPresenter validationPresenterFake(ValidationEnum name) {
         return ValidationPresenter.builder()
                 .id(ID)
                 .name(name.toString())

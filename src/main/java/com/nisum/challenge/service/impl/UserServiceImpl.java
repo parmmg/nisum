@@ -120,19 +120,20 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    private void validateUserPresenter(UserPresenter userPresenter) {        if (userPresenter.getEmail() == null || userPresenter.getEmail().isEmpty() || userPresenter.getEmail().isBlank()) {
-        throw new ValidationException("Email required");
-    }
+    private void validateUserPresenter(UserPresenter userPresenter) {
+        if (userPresenter.getEmail() == null || userPresenter.getEmail().isEmpty() || userPresenter.getEmail().isBlank()) {
+            throw new ValidationException("Email required. ");
+        }
         if (userPresenter.getPassword() == null || userPresenter.getPassword().isEmpty() || userPresenter.getPassword().isBlank()) {
-            throw new ValidationException("Password required");
+            throw new ValidationException("Password required. ");
         }
         Validation validationEmail = validationService.getValidationByName(ValidationEnum.EMAIL_VALIDATION);
         Validation validationPassword = validationService.getValidationByName(ValidationEnum.PASSWORD_VALIDATION);
         if (!Pattern.compile(validationEmail.getPattern()).matcher(userPresenter.getEmail()).matches()) {
-            throw new ValidationException(validationEmail.getMessage());
+            throw new ValidationException(validationEmail.getMessage() + " ");
         }
         if (!Pattern.compile(validationPassword.getPattern()).matcher(userPresenter.getPassword()).matches()) {
-            throw new ValidationException(validationPassword.getMessage());
+            throw new ValidationException(validationPassword.getMessage() + " ");
         }
         userPresenter.setPassword(Security.encode(userPresenter.getPassword()));
     }

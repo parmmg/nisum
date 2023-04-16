@@ -31,13 +31,13 @@ public class ValidationControllerTest {
 
     @Test
     public void shouldResponseOKGetValidations() {
-        when(validationService.getValidations()).thenReturn(Collections.singletonList(testData.configurationPresenterFake(ValidationEnum.EMAIL_VALIDATION)));
+        when(validationService.getValidations()).thenReturn(Collections.singletonList(testData.validationPresenterFake(ValidationEnum.EMAIL_VALIDATION)));
         Response response = validationController.listValidations();
         Assertions.assertThat(response.getMessage()).isEqualTo("SUCCESS");
     }
     @Test
     public void shouldResponseOKSaveValidation() {
-        ValidationPresenter validationPresenter = testData.configurationPresenterFake(ValidationEnum.EMAIL_VALIDATION);
+        ValidationPresenter validationPresenter = testData.validationPresenterFake(ValidationEnum.EMAIL_VALIDATION);
         when(validationService.saveValidation(validationPresenter)).thenReturn(validationPresenter);
         Response response = validationController.saveValidation(validationPresenter);
         Assertions.assertThat(response.getMessage()).isEqualTo("SUCCESS");
@@ -45,7 +45,7 @@ public class ValidationControllerTest {
 
     @Test
     public void shouldResponseExceptionSaveValidation() {
-        ValidationPresenter validationPresenter = testData.configurationPresenterFake(ValidationEnum.EMAIL_VALIDATION);
+        ValidationPresenter validationPresenter = testData.validationPresenterFake(ValidationEnum.EMAIL_VALIDATION);
         when(validationService.saveValidation(validationPresenter)).thenThrow(new ValidationException("Fake Error"));
         Response response = validationController.saveValidation(validationPresenter);
         Assertions.assertThat(response.getMessage()).isNotEqualTo("SUCCESS");

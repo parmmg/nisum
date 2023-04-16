@@ -34,41 +34,41 @@ public class ValidationServiceTest {
     private final TestData testData = new TestData();
 
     @Test
-    public void shouldGetConfigurations(){
+    public void shouldGetValidations(){
         List<Validation> validations = new ArrayList<>();
-        validations.add(testData.configurationFake(ValidationEnum.TEST_VALIDATION));
+        validations.add(testData.validationFake(ValidationEnum.TEST_VALIDATION));
         when(validationRepository.findAll()).thenReturn(validations);
         List<ValidationPresenter> validationPresenters = validationService.getValidations();
         Assertions.assertThat(validationPresenters).isNotEmpty();
     }
 
     @Test
-    public void shouldGetConfigurationByName() {
-        Validation validation = testData.configurationFake(ValidationEnum.TEST_VALIDATION);
+    public void shouldGetValidationByName() {
+        Validation validation = testData.validationFake(ValidationEnum.TEST_VALIDATION);
         when(validationRepository.findByName(ValidationEnum.TEST_VALIDATION)).thenReturn(Optional.of(validation));
         Validation validationSearched = validationService.getValidationByName(ValidationEnum.EMAIL_VALIDATION);
         Assertions.assertThat(validation.getName()).isEqualTo(validationSearched.getName());
     }
 
     @Test
-    public void shouldThrowExceptionWhenConfigurationByNameNotExist() {
+    public void shouldThrowExceptionWhenValidationByNameNotExist() {
         when(validationRepository.findByName(ValidationEnum.TEST_VALIDATION)).thenReturn(Optional.empty());
         Assertions.assertThatThrownBy(() -> validationService.getValidationByName(ValidationEnum.TEST_VALIDATION)).isInstanceOf(ValidationException.class)
                 .hasMessageContaining("Configuration");
     }
 
     @Test
-    public void shouldSaveConfiguration() {
-        ValidationPresenter validationPresenter = testData.configurationPresenterFake(ValidationEnum.TEST_VALIDATION);
-        Validation validation = testData.configurationFake(ValidationEnum.TEST_VALIDATION);
+    public void shouldSaveValidation() {
+        ValidationPresenter validationPresenter = testData.validationPresenterFake(ValidationEnum.TEST_VALIDATION);
+        Validation validation = testData.validationFake(ValidationEnum.TEST_VALIDATION);
         when(validationRepository.findByName(ValidationEnum.TEST_VALIDATION)).thenReturn(Optional.of(validation));
         ValidationPresenter validationPresenterSaved = validationService.saveValidation(validationPresenter);
         Assertions.assertThat(validationPresenterSaved.getId()).isEqualTo(validationPresenter.getId());
     }
 
     @Test
-    public void shouldThrowExceptionWhenSaveConfigurationWithNameNotExist() {
-        ValidationPresenter validationPresenter = testData.configurationPresenterFake(ValidationEnum.TEST_VALIDATION);
+    public void shouldThrowExceptionWhenSaveValidationWithNameNotExist() {
+        ValidationPresenter validationPresenter = testData.validationPresenterFake(ValidationEnum.TEST_VALIDATION);
         validationPresenter.setName("nameNotExist");
         Assertions.assertThatThrownBy(() -> validationService.saveValidation(validationPresenter)).isInstanceOf(ValidationException.class)
                 .hasMessageContaining("Configuration");
