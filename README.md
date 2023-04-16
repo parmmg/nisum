@@ -43,7 +43,7 @@ http://localhost:9000/api/saveValidation**
 http://localhost:9000/api/listUsers**
 
 #### Respuesta:
-![image](https://user-images.githubusercontent.com/115352466/232261266-b65f439d-9787-4ac1-8917-5f2df6a6ff32.png)
+![image](https://user-images.githubusercontent.com/115352466/232262261-47f24181-0290-42dd-ad60-68f11347658f.png)
 
 #### 
 
@@ -51,7 +51,7 @@ http://localhost:9000/api/listUsers**
 http://localhost:9000/api/findUserById**
 
 #### Respuesta:
-![image](https://user-images.githubusercontent.com/115352466/232261218-193453a6-3830-41ae-b897-19a47c6b745d.png)
+![image](https://user-images.githubusercontent.com/115352466/232262310-795b25b9-4914-442d-97d2-a0a73755149f.png)
 
 #### Respuesta Error:
 ![image](https://user-images.githubusercontent.com/115352466/232261119-d4fd3915-2702-4bfb-87c0-8e972f1cd428.png)
