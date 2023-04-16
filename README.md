@@ -1,7 +1,7 @@
 # **Nisum Challenge**
 Proyecto desarrollado por **Parmenia Maldonado** &copy;
 
-1. Clonar proyecto desde el repositorio https://github.com/parmmg/nisum.
+1. Clonar proyecto desde el repositorio.
 
 2. Descargar las dependencias del build.gradle.
 
