@@ -107,6 +107,9 @@ public class UserServiceImpl implements UserService {
     private UserPresenter toPresenter(User user) {
         return UserPresenter.builder()
                 .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .password(user.getPassword())
                 .created(user.getCreated())
                 .modified(user.getModified())
                 .lastLogin(user.getLastLogin())
