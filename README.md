@@ -59,7 +59,7 @@ http://localhost:9000/api/findUserById**
 #### 
 
 
-**Petición PUT: Crea un nuevo usuario y actualiza uno existente cuando envía el ID del mismo. 
+**Petición PUT: Crea un nuevo usuario y actualiza uno existente, cuando envía el ID del mismo en el presentador o cuando no envía el ID y es igual el name. 
 http://localhost:9000/api/saveUser**
 
 #### RequestBody:

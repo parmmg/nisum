@@ -42,25 +42,29 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserPresenter saveUser(UserPresenter userPresenter) {
         validateUserPresenter(userPresenter);
-        User user = User.builder().build();
+        userPresenter.setPassword(Security.encode(userPresenter.getPassword()));
+        Optional<User> optionalUser = userRepository.findByEmail(userPresenter.getEmail());
         if (Objects.isNull(userPresenter.getId()) || userPresenter.getId().toString().isEmpty()) {
-            userPresenter.setId(UUID.randomUUID());
+            if (optionalUser.isPresent() && optionalUser.get().getName().equals(userPresenter.getName())) {
+                userPresenter.setId(optionalUser.get().getId());
+            } else {
+                userPresenter.setId(UUID.randomUUID());
+            }
         }
-        Optional<User> userOptional = userRepository.findByEmail(userPresenter.getEmail());
-        if (userOptional.isPresent() && !userOptional.get().getId().equals(userPresenter.getId())) {
-            throw new ValidationException("Email already exist. User: " + userOptional.get().getName());
+        if (optionalUser.isPresent() && !optionalUser.get().getId().equals(userPresenter.getId())) {
+            throw new ValidationException("Email already exist. User: " + optionalUser.get().getName());
         }
-        userOptional = userRepository.findById(userPresenter.getId());
-        if (userOptional.isEmpty()) {
+        User user = User.builder().build();
+        optionalUser = userRepository.findById(userPresenter.getId());
+        if (optionalUser.isEmpty()) {
             user.setId(userPresenter.getId());
             user.setCreated(new Date());
-            user.setModified(user.getCreated());
             user.setLastLogin(user.getCreated());
         } else {
-            user = userOptional.get();
-            user.setModified(new Date());
+            user = optionalUser.get();
             user.getPhones().clear();
         }
+        user.setModified(new Date());
         user.setName(userPresenter.getName());
         user.setEmail(userPresenter.getEmail());
         user.setPassword(userPresenter.getPassword());
@@ -138,7 +142,6 @@ public class UserServiceImpl implements UserService {
         if (!Pattern.compile(validationPassword.getPattern()).matcher(userPresenter.getPassword()).matches()) {
             throw new ValidationException(validationPassword.getMessage() + " ");
         }
-        userPresenter.setPassword(Security.encode(userPresenter.getPassword()));
     }
 
 }
