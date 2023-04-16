@@ -12,14 +12,11 @@ import com.nisum.challenge.util.TestData;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
@@ -62,19 +59,21 @@ public class UserServiceTest {
 
     @Test
     public void shouldGetLogin(){
-        LoginPresenter loginPresenter = testData.loginPresenterFake();
-        when(userRepository.findByEmail(loginPresenter.getUser())).thenReturn(Optional.of(testData.userFake()));
-        lenient().when(Security.encode(loginPresenter.getPassword())).thenReturn(loginPresenter.getPassword());
-        UserPresenter userPresenter = userService.login(loginPresenter);
-        Assertions.assertThat(userPresenter.getEmail()).isEqualTo(loginPresenter.getUser());
+        try (MockedStatic<Security> securityMockedStatic = Mockito.mockStatic(Security.class)) {
+            LoginPresenter loginPresenter = testData.loginPresenterFake();
+            User user = testData.userFake();
+            when(userRepository.findByEmail(loginPresenter.getUser())).thenReturn(Optional.of(user));
+            securityMockedStatic.when(() -> Security.encode(loginPresenter.getPassword())).thenReturn(user.getPassword());
+            when(userRepository.save(user)).thenReturn(user);
+            UserPresenter userPresenter = userService.login(loginPresenter);
+            Assertions.assertThat(userPresenter.getEmail()).isEqualTo(loginPresenter.getUser());
+        }
     }
 
     @Test
     public void shouldThrowExceptionWhenLoginWithIncorrectPassword() {
         LoginPresenter loginPresenter = testData.loginPresenterFake();
-        loginPresenter.setPassword("");
         when(userRepository.findByEmail(loginPresenter.getUser())).thenReturn(Optional.of(testData.userFake()));
-        lenient().when(Security.encode(loginPresenter.getPassword())).thenReturn(anyString());
         Assertions.assertThatThrownBy(() -> userService.login(loginPresenter)).isInstanceOf(ValidationException.class)
                 .hasMessageContaining("Denied access");
     }
@@ -83,28 +82,28 @@ public class UserServiceTest {
     public void shouldThrowExceptionWhenLoginWithIncorrectEmail() {
         LoginPresenter loginPresenter = testData.loginPresenterFake();
         when(userRepository.findByEmail(loginPresenter.getUser())).thenReturn(Optional.empty());
-        lenient().when(Security.encode(loginPresenter.getPassword())).thenReturn(anyString());
         Assertions.assertThatThrownBy(() -> userService.login(loginPresenter)).isInstanceOf(ValidationException.class)
                 .hasMessageContaining("Denied access");
     }
 
     @Test
     public void shouldSaveUser() {
-        User user = testData.userFake();
-        UserPresenter userPresenter = testData.userPresenterFake();
-        lenient().when(Security.encode(user.getPassword())).thenReturn(user.getPassword());
-        when(userRepository.save(user)).thenReturn(user);
-        when(validationService.getValidationByName(ValidationEnum.EMAIL_VALIDATION)).thenReturn(testData.validationFake(ValidationEnum.EMAIL_VALIDATION));
-        when(validationService.getValidationByName(ValidationEnum.PASSWORD_VALIDATION)).thenReturn(testData.validationFake(ValidationEnum.PASSWORD_VALIDATION));
-        UserPresenter userSaved = userService.saveUser(userPresenter);
-        Assertions.assertThat(userPresenter).isEqualTo(userSaved);
+        try (MockedStatic<Security> securityMockedStatic = Mockito.mockStatic(Security.class)) {
+            User user = testData.userFake();
+            UserPresenter userPresenter = testData.userPresenterFake();
+            when(validationService.getValidationByName(ValidationEnum.EMAIL_VALIDATION)).thenReturn(testData.validationFake(ValidationEnum.EMAIL_VALIDATION));
+            when(validationService.getValidationByName(ValidationEnum.PASSWORD_VALIDATION)).thenReturn(testData.validationFake(ValidationEnum.PASSWORD_VALIDATION));
+            securityMockedStatic.when(() -> Security.encode(userPresenter.getPassword())).thenReturn(userPresenter.getPassword());
+            when(userRepository.save(user)).thenReturn(user);
+            UserPresenter userSaved = userService.saveUser(userPresenter);
+            Assertions.assertThat(userPresenter).isEqualTo(userSaved);
+        }
     }
 
     @Test
     public void shouldGetValidationExceptionWhenEmailExist() {
         UserPresenter user = testData.userPresenterFake();
         user.setId(UUID.randomUUID());
-        lenient().when(Security.encode(user.getPassword())).thenReturn(user.getPassword());
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(testData.userFake()));
         when(validationService.getValidationByName(ValidationEnum.EMAIL_VALIDATION)).thenReturn(testData.validationFake(ValidationEnum.EMAIL_VALIDATION));
         when(validationService.getValidationByName(ValidationEnum.PASSWORD_VALIDATION)).thenReturn(testData.validationFake(ValidationEnum.PASSWORD_VALIDATION));
@@ -113,25 +112,40 @@ public class UserServiceTest {
     }
 
     @Test
+    public void shouldGetValidationExceptionWhenEmailIsMissing() {
+        UserPresenter user = testData.userPresenterFake();
+        user.setEmail("");
+        lenient().when(validationService.getValidationByName(ValidationEnum.EMAIL_VALIDATION)).thenReturn(testData.validationFake(ValidationEnum.EMAIL_VALIDATION));
+        lenient().when(validationService.getValidationByName(ValidationEnum.PASSWORD_VALIDATION)).thenReturn(testData.validationFake(ValidationEnum.PASSWORD_VALIDATION));
+        Assertions.assertThatThrownBy(() -> userService.saveUser(user)).isInstanceOf(ValidationException.class)
+                .hasMessageContaining("required");
+    }
+
+    @Test
     public void shouldGetValidationExceptionWhenEmailIsInvalid() {
         UserPresenter user = testData.userPresenterFake();
-        lenient().when(Security.encode(user.getPassword())).thenReturn(user.getPassword());
-        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
-        when(validationService.getValidationByName(ValidationEnum.EMAIL_VALIDATION)).thenReturn(testData.validationFake(ValidationEnum.EMAIL_VALIDATION));
-        when(validationService.getValidationByName(ValidationEnum.PASSWORD_VALIDATION)).thenReturn(testData.validationFake(ValidationEnum.PASSWORD_VALIDATION));
-        user.setEmail("");
+        user.setEmail("a");
+        lenient().when(validationService.getValidationByName(ValidationEnum.EMAIL_VALIDATION)).thenReturn(testData.validationFake(ValidationEnum.EMAIL_VALIDATION));
+        lenient().when(validationService.getValidationByName(ValidationEnum.PASSWORD_VALIDATION)).thenReturn(testData.validationFake(ValidationEnum.PASSWORD_VALIDATION));
         Assertions.assertThatThrownBy(() -> userService.saveUser(user)).isInstanceOf(ValidationException.class)
                 .hasMessageContaining("EMAIL_VALIDATION");
     }
 
     @Test
+    public void shouldGetValidationExceptionWhenPasswordIsMissing() {
+        UserPresenter user = testData.userPresenterFake();
+        user.setPassword("");
+        lenient().when(validationService.getValidationByName(ValidationEnum.EMAIL_VALIDATION)).thenReturn(testData.validationFake(ValidationEnum.EMAIL_VALIDATION));
+        lenient().when(validationService.getValidationByName(ValidationEnum.PASSWORD_VALIDATION)).thenReturn(testData.validationFake(ValidationEnum.PASSWORD_VALIDATION));
+        Assertions.assertThatThrownBy(() -> userService.saveUser(user)).isInstanceOf(ValidationException.class)
+                .hasMessageContaining("required");
+    }
+    @Test
     public void shouldGetValidationExceptionWhenPasswordIsInvalid() {
         UserPresenter user = testData.userPresenterFake();
-        lenient().when(Security.encode(user.getPassword())).thenReturn(user.getPassword());
-        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
+        user.setPassword("a");
         when(validationService.getValidationByName(ValidationEnum.EMAIL_VALIDATION)).thenReturn(testData.validationFake(ValidationEnum.EMAIL_VALIDATION));
         when(validationService.getValidationByName(ValidationEnum.PASSWORD_VALIDATION)).thenReturn(testData.validationFake(ValidationEnum.PASSWORD_VALIDATION));
-        user.setPassword("");
         Assertions.assertThatThrownBy(() -> userService.saveUser(user)).isInstanceOf(ValidationException.class)
                 .hasMessageContaining("PASSWORD_VALIDATION");
     }

@@ -46,7 +46,7 @@ public class ValidationServiceTest {
     public void shouldGetValidationByName() {
         Validation validation = testData.validationFake(ValidationEnum.TEST_VALIDATION);
         when(validationRepository.findByName(ValidationEnum.TEST_VALIDATION)).thenReturn(Optional.of(validation));
-        Validation validationSearched = validationService.getValidationByName(ValidationEnum.EMAIL_VALIDATION);
+        Validation validationSearched = validationService.getValidationByName(ValidationEnum.TEST_VALIDATION);
         Assertions.assertThat(validation.getName()).isEqualTo(validationSearched.getName());
     }
 

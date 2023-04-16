@@ -28,6 +28,7 @@ public class TestData {
     public UserPresenter userPresenterFake() {
         return UserPresenter.builder()
                 .id(ID)
+                .password("P4ssW0rd")
                 .name("name")
                 .email("a@a.aa")
                 .active(true)
@@ -50,7 +51,7 @@ public class TestData {
         return Validation.builder()
                 .id(ID)
                 .name(name)
-                .pattern(name.toString().equals("") ? "^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{8,16}$" : "")
+                .pattern(name.toString().equals("PASSWORD_VALIDATION")?"^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{8,16}$":"^[^@]+@[^@]+\\.[a-zA-Z]{2,}$")
                 .message(name.toString())
                 .build();
     }
@@ -59,7 +60,7 @@ public class TestData {
         return ValidationPresenter.builder()
                 .id(ID)
                 .name(name.toString())
-                .pattern(name.toString().equals("") ? "^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{8,16}$" : "")
+                .pattern(name.toString().equals("PASSWORD_VALIDATION")?"^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{8,16}$":"^[^@]+@[^@]+\\.[a-zA-Z]{2,}$")
                 .message(name.toString())
                 .build();
     }

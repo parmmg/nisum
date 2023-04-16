@@ -99,7 +99,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserPresenter login(LoginPresenter loginPresenter) {
         User user = userRepository.findByEmail(loginPresenter.getUser()).orElseThrow(() -> new ValidationException(HttpStatus.FORBIDDEN, "Denied access"));
-        if (!user.getPassword().equals(Security.encode(loginPresenter.getPassword()))) {
+        String password = Security.encode(loginPresenter.getPassword());
+        if (!user.getPassword().equals(password)) {
             throw new ValidationException(HttpStatus.FORBIDDEN, "Denied access");
         }
         user.setLastLogin(new Date());
@@ -136,10 +137,10 @@ public class UserServiceImpl implements UserService {
         }
         Validation validationEmail = validationService.getValidationByName(ValidationEnum.EMAIL_VALIDATION);
         Validation validationPassword = validationService.getValidationByName(ValidationEnum.PASSWORD_VALIDATION);
-        if (!Pattern.compile(validationEmail.getPattern()).matcher(userPresenter.getEmail()).matches()) {
+        if (!validationEmail.getPattern().isBlank() && !Pattern.compile(validationEmail.getPattern()).matcher(userPresenter.getEmail()).matches()) {
             throw new ValidationException(validationEmail.getMessage() + " ");
         }
-        if (!Pattern.compile(validationPassword.getPattern()).matcher(userPresenter.getPassword()).matches()) {
+        if (!validationPassword.getPattern().isBlank() && !Pattern.compile(validationPassword.getPattern()).matcher(userPresenter.getPassword()).matches()) {
             throw new ValidationException(validationPassword.getMessage() + " ");
         }
     }
