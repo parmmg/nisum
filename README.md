@@ -7,9 +7,9 @@ Proyecto desarrollado por **Parmenia Maldonado** &copy;
 
 3. El proyecto fue desarrollado con Spring Boot 3.1.0-M2, Java 17, bajo el patrón de diseño MVC.
 
-4. La persistencia de datos utiliza JPA, base de datos en memoria H2 y **liquidbase** para la creación de tablas y carga de datos iniciales, dentro del archivo: **/resources/db.changelog.xml** se encuentran el script inicial.
+4. La persistencia de datos utiliza JPA, base de datos en memoria H2 y **liquidbase** para la creación de tablas y carga de datos iniciales, dentro del archivo: **src/main/resources/db.changelog.xml** se encuentran el script inicial.
 
-5. El proyecto se despliega en el puerto 9000 de acuerdo a la configuración en el archivo application.yml.
+5. El proyecto se despliega en el puerto 9000 de acuerdo a la configuración en el archivo **src/main/resources/application.yml**.
 
 6. El contextPath de la app está configurado con el valor /api.
 
@@ -85,7 +85,9 @@ http://localhost:9000/api/login**
 ![image](https://user-images.githubusercontent.com/115352466/232261572-4868d82b-7c27-45b5-977b-3e6550b51232.png)
 
 
-10. Para ingresar a la consola de h2: **http://localhost:9000/api/h2-console** Datos para configurar conexión a la base de datos: Driver Class: org.h2.Driver JDBC URL: jdbc:h2:mem:nisum username: nisum  /  password: nisum
+10. Para ingresar a la consola de h2: **http://localhost:9000/api/h2-console** 
+
+Datos para configurar conexión a la base de datos: **Driver Class: org.h2.Driver JDBC URL: jdbc:h2:mem:nisum username: nisum  /  password: nisum**. Estos datos se encuentran en el archivo de configuración **src/main/resources/application.yml**.
 
 ![image](https://user-images.githubusercontent.com/115352466/232260977-202347ef-6172-4a78-bc23-328a36321f85.png)
 
