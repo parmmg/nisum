@@ -13,13 +13,15 @@ Proyecto desarrollado por **Parmenia Maldonado** &copy;
 
 6. El contextPath de la app está configurado con el valor /api.
 
-7. Las configuraciones de las validaciones con expresiones regulares en la base de datos se cargan en el arranque inicial, las que pueden ser modificadas / creadas / listadas, con los siguientes endpoints: 
+7. Se indica la respuesta HTTP respectiva. En caso de éxito se envía la data requerida, En caso de error, devuelve la respuesta HTTP respectiva con la data nula y en el mensaje explica el motivo de la excepción.
+
+8. Las configuraciones de las validaciones con expresiones regulares en la base de datos se cargan en el arranque inicial, las que pueden ser modificadas / creadas / listadas. Se exponen los siguientes endpoints: 
 
 **Petición GET:  Obtiene las configuraciones existentes
 http://localhost:9000/api/listValidations**
   
 #### Respuesta:
-
+![image](https://user-images.githubusercontent.com/115352466/232261293-d9c71bfc-b4a1-47f5-90ca-fba90b1e4bd0.png)
 
 #### 
 
@@ -27,18 +29,21 @@ http://localhost:9000/api/listValidations**
 http://localhost:9000/api/saveValidation**
 
 #### RequestBody:
-
+![image](https://user-images.githubusercontent.com/115352466/232261360-3bb1ab10-1b84-4ca9-92fd-b26d97a66cf7.png)
 
 #### Respuesta:
+![image](https://user-images.githubusercontent.com/115352466/232261370-a25c1b0b-b5be-4317-847f-c5af7e2a10f2.png)
 
+#### Respuesta Error:
+![image](https://user-images.githubusercontent.com/115352466/232261474-e15f2390-2ad1-4390-9b3d-24be83b8fa44.png)
 
-8. Los endpoints solicitados para los usuarios, se exponen de la siguiente manera:
+9. Los endpoints solicitados para los usuarios, se exponen de la siguiente manera:
 
 **Petición GET: Lista todos los usuarios
 http://localhost:9000/api/listUsers**
 
 #### Respuesta:
-
+![image](https://user-images.githubusercontent.com/115352466/232261266-b65f439d-9787-4ac1-8917-5f2df6a6ff32.png)
 
 #### 
 
@@ -46,7 +51,10 @@ http://localhost:9000/api/listUsers**
 http://localhost:9000/api/findUserById**
 
 #### Respuesta:
+![image](https://user-images.githubusercontent.com/115352466/232261218-193453a6-3830-41ae-b897-19a47c6b745d.png)
 
+#### Respuesta Error:
+![image](https://user-images.githubusercontent.com/115352466/232261119-d4fd3915-2702-4bfb-87c0-8e972f1cd428.png)
 
 #### 
 
@@ -55,25 +63,38 @@ http://localhost:9000/api/findUserById**
 http://localhost:9000/api/saveUser**
 
 #### RequestBody:
-
+![image](https://user-images.githubusercontent.com/115352466/232261146-d106019f-3d74-4676-b67c-b3cb3961d574.png)
 
 #### Respuesta:
+![image](https://user-images.githubusercontent.com/115352466/232261177-5c105e08-6300-4874-a89b-db1c6d703b34.png)
+
+#### Respuesta Error:
+![image](https://user-images.githubusercontent.com/115352466/232261519-53d656c1-c169-433a-8047-61734e7516e6.png)
 
 
 **Petición POST: Login del usuario, devolviendo el presentador del usuario, luego de actualizar los campos de TOKEN, fecha de modificación y último login.
 http://localhost:9000/api/login**
 
 #### RequestBody:
-
+![image](https://user-images.githubusercontent.com/115352466/232261552-381619ae-7076-414f-ba5b-a9abcf0a4d9a.png)
 
 #### Respuesta:
+![image](https://user-images.githubusercontent.com/115352466/232261561-5f4faeac-382d-4793-b5a0-a37a78b86bad.png)
+
+#### Respuesta Error:
+![image](https://user-images.githubusercontent.com/115352466/232261572-4868d82b-7c27-45b5-977b-3e6550b51232.png)
 
 
-9. Para ingresar a la consola de h2: **http://localhost:9000/api/h2-console** Datos para configurar conexión a la base de datos: Driver Class: org.h2.Driver JDBC URL: jdbc:h2:mem:nisum username: nisum  /  password: nisum
+10. Para ingresar a la consola de h2: **http://localhost:9000/api/h2-console** Datos para configurar conexión a la base de datos: Driver Class: org.h2.Driver JDBC URL: jdbc:h2:mem:nisum username: nisum  /  password: nisum
 
-10. El proyecto tiene la swagger para la documentación. Para ingresar a la misma se debe abrir el hipervínculo: **http://localhost:9000/api/swagger-ui/index.html#/**
+![image](https://user-images.githubusercontent.com/115352466/232260977-202347ef-6172-4a78-bc23-328a36321f85.png)
 
-11. Se realizan pruebas unitarias con JUnit y Mockito, de toda la lógica en los servicios, excepciones y controladores.
+11. El proyecto tiene la swagger para la documentación. Para ingresar a la misma se debe abrir el hipervínculo: **http://localhost:9000/api/swagger-ui/index.html#/**
 
-12. El diagrama de la solución se encuentra dentro de los recursos, específicamente en la ruta: src\main\resources\Diagrama.png
+![image](https://user-images.githubusercontent.com/115352466/232260989-cab0c9b6-2a8f-4be9-8e45-743314bfa497.png)
+
+
+12. Se realizan pruebas unitarias con JUnit y Mockito, de toda la lógica en los servicios, excepciones y controladores.
+
+13. El diagrama de la solución se encuentra dentro de los recursos, específicamente en la ruta: src\main\resources\Diagrama.png
 
