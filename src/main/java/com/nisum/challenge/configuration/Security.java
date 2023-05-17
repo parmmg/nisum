@@ -1,4 +1,4 @@
-package com.nisum.challenge.infraestructure;
+package com.nisum.challenge.configuration;
 
 import com.nisum.challenge.util.DateUtils;
 import io.jsonwebtoken.JwtBuilder;
@@ -35,7 +35,6 @@ public class Security {
             }
         }
     }
-
 
     public static String encode(String password) {
         try {

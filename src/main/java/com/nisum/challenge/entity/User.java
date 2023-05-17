@@ -38,6 +38,6 @@ public class User {
     @NotNull
     @Builder.Default
     private Boolean active = true;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "user", orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<Phone> phones;
 }

@@ -2,7 +2,6 @@ package com.nisum.challenge.controller;
 
 import com.nisum.challenge.enumerator.ValidationEnum;
 import com.nisum.challenge.exception.ValidationException;
-import com.nisum.challenge.infraestructure.Response;
 import com.nisum.challenge.presenter.ValidationPresenter;
 import com.nisum.challenge.service.ValidationService;
 import com.nisum.challenge.util.TestData;
@@ -15,6 +14,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.Mockito.when;
 
@@ -32,23 +32,24 @@ public class ValidationControllerTest {
     @Test
     public void shouldResponseOKGetValidations() {
         when(validationService.getValidations()).thenReturn(Collections.singletonList(testData.validationPresenterFake(ValidationEnum.EMAIL_VALIDATION)));
-        Response response = validationController.listValidations();
-        Assertions.assertThat(response.getMessage()).isEqualTo("SUCCESS");
+        List<ValidationPresenter> validationPresenter = validationController.listValidations();
+        Assertions.assertThat(validationPresenter).isNotEmpty();
     }
     @Test
     public void shouldResponseOKSaveValidation() {
         ValidationPresenter validationPresenter = testData.validationPresenterFake(ValidationEnum.EMAIL_VALIDATION);
         when(validationService.saveValidation(validationPresenter)).thenReturn(validationPresenter);
-        Response response = validationController.saveValidation(validationPresenter);
-        Assertions.assertThat(response.getMessage()).isEqualTo("SUCCESS");
+        ValidationPresenter validation = validationController.saveValidation(validationPresenter);
+        Assertions.assertThat(validationPresenter).isEqualTo(validation);
     }
 
     @Test
     public void shouldResponseExceptionSaveValidation() {
         ValidationPresenter validationPresenter = testData.validationPresenterFake(ValidationEnum.EMAIL_VALIDATION);
         when(validationService.saveValidation(validationPresenter)).thenThrow(new ValidationException("Fake Error"));
-        Response response = validationController.saveValidation(validationPresenter);
-        Assertions.assertThat(response.getMessage()).isNotEqualTo("SUCCESS");
+        Throwable exception = Assertions.catchThrowable(()->validationController.saveValidation(validationPresenter));
+        Assertions.assertThat(exception).isInstanceOf(ValidationException.class);
+        Assertions.assertThat(exception.getMessage()).contains("Fake Error");
     }
 
 }

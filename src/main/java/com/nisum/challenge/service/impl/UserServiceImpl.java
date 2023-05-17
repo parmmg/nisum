@@ -6,17 +6,15 @@ import com.nisum.challenge.entity.User;
 import com.nisum.challenge.enumerator.ValidationEnum;
 import com.nisum.challenge.exception.ValidationException;
 import com.nisum.challenge.presenter.LoginPresenter;
-import com.nisum.challenge.presenter.PhonePresenter;
 import com.nisum.challenge.presenter.UserPresenter;
-import com.nisum.challenge.repository.PhoneRepository;
 import com.nisum.challenge.repository.UserRepository;
 import com.nisum.challenge.service.ValidationService;
 import com.nisum.challenge.service.UserService;
-import com.nisum.challenge.infraestructure.Security;
+import com.nisum.challenge.configuration.Security;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -30,38 +28,29 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ValidationService validationService;
     @Autowired
-    private PhoneRepository phoneRepository;
+    private ModelMapper modelMapper;
 
     @Override
     public UserPresenter getUserById(UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "User account not found"));
-        return toPresenter(user);
+        return modelMapper.map(user, UserPresenter.class);
     }
 
     @Override
-    @Transactional
-    public UserPresenter saveUser(UserPresenter userPresenter) {
+    public UserPresenter saveUser(UUID userId, UserPresenter userPresenter) {
+        User user = (userId==null ? new User() : userRepository.findById(userId).orElseThrow(()-> new ValidationException(HttpStatus.NOT_FOUND, "User Id Not Found")));
         validateUserPresenter(userPresenter);
         userPresenter.setPassword(Security.encode(userPresenter.getPassword()));
+        userPresenter.setId(userId==null?UUID.randomUUID():userId);
         Optional<User> optionalUser = userRepository.findByEmail(userPresenter.getEmail());
-        if (Objects.isNull(userPresenter.getId()) || userPresenter.getId().toString().isEmpty()) {
-            if (optionalUser.isPresent() && optionalUser.get().getName().equals(userPresenter.getName())) {
-                userPresenter.setId(optionalUser.get().getId());
-            } else {
-                userPresenter.setId(UUID.randomUUID());
-            }
-        }
         if (optionalUser.isPresent() && !optionalUser.get().getId().equals(userPresenter.getId())) {
             throw new ValidationException("Email already exist. User: " + optionalUser.get().getName());
         }
-        User user = User.builder().build();
-        optionalUser = userRepository.findById(userPresenter.getId());
-        if (optionalUser.isEmpty()) {
+        if (user.getId()==null) {
             user.setId(userPresenter.getId());
             user.setCreated(new Date());
             user.setLastLogin(user.getCreated());
         } else {
-            user = optionalUser.get();
             user.getPhones().clear();
         }
         user.setModified(new Date());
@@ -73,26 +62,27 @@ public class UserServiceImpl implements UserService {
         } else {
             userPresenter.setActive(user.getActive());
         }
+        user.setPhones(userPresenter.getPhones().stream().map(phonePresenter -> {
+            Phone phone = modelMapper.map(phonePresenter, Phone.class);
+            phone.setUser(user);
+            return phone;
+        }).collect(Collectors.toSet()));
         userPresenter.setToken(Security.createToken(user));
         user.setToken(userPresenter.getToken());
-        final User userFinal = userRepository.save(user);
-        user.setPhones(userPresenter.getPhones().stream().map(phonePresenter -> phoneRepository.save(Phone.builder()
-                .number(phonePresenter.getNumber())
-                .cityCode(phonePresenter.getCityCode())
-                .countryCode(phonePresenter.getCountryCode())
-                .user(userFinal)
-                .build())).collect(Collectors.toSet()));
-        userRepository.save(user);
         userPresenter.setCreated(user.getCreated());
         userPresenter.setModified(user.getModified());
         userPresenter.setLastLogin(user.getLastLogin());
+        userRepository.save(user);
         return userPresenter;
     }
 
     @Override
     public List<UserPresenter> getUsers() {
         List<UserPresenter> userPresenters = new ArrayList<>();
-        userRepository.findAll().forEach(user -> userPresenters.add(toPresenter(user)));
+        userRepository.findAll().forEach(user -> userPresenters.add(modelMapper.map(user,UserPresenter.class)));
+        if (userPresenters.isEmpty()) {
+            throw new ValidationException(HttpStatus.NOT_FOUND, "Empty Users");
+        }
         return userPresenters;
     }
 
@@ -106,26 +96,14 @@ public class UserServiceImpl implements UserService {
         user.setLastLogin(new Date());
         user.setModified(user.getLastLogin());
         user.setToken(Security.createToken(user));
-        return toPresenter(userRepository.save(user));
+        return modelMapper.map(userRepository.save(user), UserPresenter.class);
     }
 
-    private UserPresenter toPresenter(User user) {
-        return UserPresenter.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .created(user.getCreated())
-                .modified(user.getModified())
-                .lastLogin(user.getLastLogin())
-                .token(user.getToken())
-                .active(user.getActive())
-                .phones(user.getPhones().stream().map(phone -> PhonePresenter.builder()
-                        .number(phone.getNumber())
-                        .cityCode(phone.getCityCode())
-                        .countryCode(phone.getCountryCode())
-                        .build()).collect(Collectors.toSet()))
-                .build();
+    @Override
+    public UserPresenter deleteUser(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(()-> new ValidationException(HttpStatus.NOT_FOUND, "User Not Found"));
+        userRepository.delete(user);
+        return modelMapper.map(user, UserPresenter.class);
     }
 
     private void validateUserPresenter(UserPresenter userPresenter) {

@@ -1,23 +1,23 @@
 package com.nisum.challenge.exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.validation.ConstraintViolation;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@ResponseStatus(code = HttpStatus.PRECONDITION_FAILED, reason = "Error")
 public class ValidationException extends ResponseStatusException {
 
     public ValidationException(String exString) {
         super(HttpStatus.PRECONDITION_FAILED, exString);
     }
 
-    public ValidationException(HttpStatus status, String exString) {
+    public ValidationException(HttpStatusCode status, String exString) {
         super(status, exString);
     }
+
     public ValidationException(String exString, Set<ConstraintViolation<?>> constraintViolations) {
         super(HttpStatus.PRECONDITION_FAILED, createMessage(exString, constraintViolations));
     }

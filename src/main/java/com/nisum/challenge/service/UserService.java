@@ -10,7 +10,9 @@ import java.util.UUID;
 public interface UserService {
 
     UserPresenter getUserById(UUID userId);
-    UserPresenter saveUser(UserPresenter userPresenter);
+    UserPresenter saveUser(UUID userId, UserPresenter userPresenter);
     List<UserPresenter> getUsers();
     UserPresenter login(LoginPresenter loginPresenter);
+    UserPresenter deleteUser(UUID userId);
+
 }
