@@ -18,15 +18,15 @@ Proyecto desarrollado por **Parmenia Maldonado** &copy;
 8. Las configuraciones de las validaciones con expresiones regulares en la base de datos se cargan en el arranque inicial, las que pueden ser modificadas / creadas / listadas. Se exponen los siguientes endpoints: 
 
 **Petición GET:  Obtiene las configuraciones existentes
-http://localhost:9000/api/listValidations**
+http://localhost:9000/api/validations/**
   
 #### Respuesta:
 ![image](https://user-images.githubusercontent.com/115352466/232261293-d9c71bfc-b4a1-47f5-90ca-fba90b1e4bd0.png)
 
 #### 
 
-**Petición PUT: Actualiza una validación o crea una nueva siempre y cuando la configuración exista y el campo name no exista en la Bdd
-http://localhost:9000/api/saveValidation**
+**Petición POST: Actualiza o crea una validación si no existe
+http://localhost:9000/api/validations/**
 
 #### RequestBody:
 ![image](https://user-images.githubusercontent.com/115352466/232261360-3bb1ab10-1b84-4ca9-92fd-b26d97a66cf7.png)
@@ -40,15 +40,15 @@ http://localhost:9000/api/saveValidation**
 9. Los endpoints solicitados para los usuarios, se exponen de la siguiente manera:
 
 **Petición GET: Lista todos los usuarios
-http://localhost:9000/api/listUsers**
+http://localhost:9000/api/users/**
 
 #### Respuesta:
 ![image](https://user-images.githubusercontent.com/115352466/232262261-47f24181-0290-42dd-ad60-68f11347658f.png)
 
 #### 
 
-**Petición GET: Devuelve un usuario existente por ID, el cual debe ser pasado como parámetro
-http://localhost:9000/api/findUserById**
+**Petición GET: Devuelve un usuario existente por ID, el cual debe ser pasado en el context Path
+http://localhost:9000/api/users/{id}**
 
 #### Respuesta:
 ![image](https://user-images.githubusercontent.com/115352466/232262310-795b25b9-4914-442d-97d2-a0a73755149f.png)
@@ -57,10 +57,12 @@ http://localhost:9000/api/findUserById**
 ![image](https://user-images.githubusercontent.com/115352466/232261119-d4fd3915-2702-4bfb-87c0-8e972f1cd428.png)
 
 #### 
+**Petición POST: Ingresa un nuevo usuario en el context path y los datos en el body.
+http://localhost:9000/api/users/{id}**
 
 
-**Petición PUT: Crea un nuevo usuario y actualiza uno existente, cuando envía el ID del mismo en el presentador o cuando no envía el ID y es igual el name. 
-http://localhost:9000/api/saveUser**
+**Petición PUT: Actualiza el usuario con el id indicado en el context path y los datos en el body. 
+http://localhost:9000/api/users/{id}**
 
 #### RequestBody:
 ![image](https://user-images.githubusercontent.com/115352466/232261146-d106019f-3d74-4676-b67c-b3cb3961d574.png)
