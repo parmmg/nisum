@@ -95,9 +95,6 @@ Datos para configurar conexión a la base de datos: **Driver Class: org.h2.Drive
 
 11. El proyecto tiene la swagger para la documentación. Para ingresar a la misma se debe abrir el hipervínculo: **http://localhost:9000/api/swagger-ui/index.html#/**
 
-![image](https://user-images.githubusercontent.com/115352466/232260989-cab0c9b6-2a8f-4be9-8e45-743314bfa497.png)
-
-
 12. Se realizan pruebas unitarias con JUnit y Mockito, de toda la lógica en los servicios, excepciones y controladores.
 
 13. El diagrama de la solución se encuentra dentro de los recursos, específicamente en la ruta: src\main\resources\Diagrama.png
